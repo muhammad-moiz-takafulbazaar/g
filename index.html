@@ -1,0 +1,157 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #333;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h1 {
+        margin: 0;
+    }
+
+    main {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    input[type="number"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .button-container {
+        display: flex;
+    }
+
+    button {
+        width: 50%;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin: 5%;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    footer {
+        background-color: #333;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        bottom: 0;
+        position: fixed;
+        left: 0;
+        width: 100%;
+    }
+</style>
+<header>
+    <h1>Caesar Cipher</h1>
+</header>
+<main>
+    <div>
+        <label for="plaintext">Enter your message:</label>
+        <textarea id="plaintext" rows="4" cols="50"></textarea>
+    </div>
+
+    <div>
+        <label for="shift">Enter the shift value:</label>
+        <input type="number" id="shift" min="1" max="25" value="3">
+    </div>
+
+    <div class="button-container">
+        <button id="encrypt-btn">Encrypt</button>
+        <button id="decrypt-btn">Decrypt</button>
+    </div>
+
+    <div>
+        <label for="ciphertext">Result:</label>
+        <textarea id="ciphertext" rows="4" cols="50" readonly></textarea>
+    </div>
+</main>
+<footer>
+    <p>Created by [Your Name]</p>
+</footer>
+<script>
+    function encrypt() {
+        const plaintext = document.getElementById("plaintext").value;
+        const shift = parseInt(document.getElementById("shift").value);
+
+        let ciphertext = "";
+
+        for (let i = 0; i < plaintext.length; i++) {
+            let char = plaintext[i];
+
+            if (char.match(/[a-z]/i)) {
+                const code = plaintext.charCodeAt(i);
+                if (code >= 65 && code <= 90) {
+                    char = String.fromCharCode(((code - 65 + shift) % 26) + 65);
+                } else if (code >= 97 && code <= 122) {
+                    char = String.fromCharCode(((code - 97 + shift) % 26) + 97);
+                }
+            }
+
+            ciphertext += char;
+        }
+
+        document.getElementById("ciphertext").value = ciphertext;
+    }
+
+    function decrypt() {
+        const ciphertext = document.getElementById("ciphertext").value;
+        const shift = parseInt(document.getElementById("shift").value);
+
+        let plaintext = "";
+
+        for (let i = 0; i < ciphertext.length; i++) {
+            let char = ciphertext[i];
+
+            if (char.match(/[a-z]/i)) {
+                const code = ciphertext.charCodeAt(i);
+                if (code >= 65 && code <= 90) {
+                    char = String.fromCharCode(((code - 65 - shift + 26) % 26) + 65);
+                } else if (code >= 97 && code <= 122) {
+                    char = String.fromCharCode(((code - 97 - shift + 26) % 26) + 97);
+                }
+            }
+
+            plaintext += char;
+        }
+
+        document.getElementById("ciphertext").value = plaintext;
+    }
+
+    document.getElementById("encrypt-btn").addEventListener("click", encrypt);
+    document.getElementById("decrypt-btn").addEventListener("click", decrypt);
+</script>
